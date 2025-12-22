@@ -4,27 +4,28 @@ export function Snowfall() {
   const [snowflakes, setSnowflakes] = useState<number[]>([]);
 
   useEffect(() => {
-    // Create 30 snowflakes
-    setSnowflakes(Array.from({ length: 30 }, (_, i) => i));
+    // Create 40 snowflakes for more impact on red background
+    setSnowflakes(Array.from({ length: 40 }, (_, i) => i));
   }, []);
 
   return (
     <div className="snow-container" aria-hidden="true">
       {snowflakes.map((i) => {
         const left = Math.random() * 100;
-        const duration = 5 + Math.random() * 10;
+        const duration = 6 + Math.random() * 12;
         const delay = Math.random() * 5;
-        const size = 0.5 + Math.random() * 1;
+        const size = 0.6 + Math.random() * 1.2;
         
         return (
           <div
             key={i}
-            className="snowflake text-slate-200 dark:text-slate-700"
+            className="snowflake text-white"
             style={{
               left: `${left}%`,
               animationDuration: `${duration}s`,
               animationDelay: `${delay}s`,
               transform: `scale(${size})`,
+              opacity: 0.9,
             }}
           >
             ❄

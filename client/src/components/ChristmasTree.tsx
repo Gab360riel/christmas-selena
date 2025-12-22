@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Message } from "@shared/schema";
 import confetti from "canvas-confetti";
-import { Star } from "lucide-react";
+import treeImage from "@assets/stock_images/realistic_christmas__1ecb285c.jpg";
 
 interface ChristmasTreeProps {
   messages: Message[];
@@ -29,191 +29,136 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
     });
   };
 
-  // Generate deterministic but random-looking positions for ornaments
+  // Generate random positions constrained within the tree image bounds
   const getOrnamentPosition = (index: number, total: number) => {
-    // We want a triangular distribution for the tree shape
-    // Simple approximation: map index to "layers"
-    const layer = Math.floor(Math.sqrt(index * 2)); 
-    const layerWidth = 40 + (layer * 30); // Width increases as we go down
-    const y = 15 + (layer * 12); // Vertical spacing
+    // Tree image is roughly cone-shaped, we constrain ornaments to tree area
+    // Using a seed for deterministic randomness
+    const seed = index * 9301 + 49297;
+    const pseudoRandom1 = ((seed) % 233280) / 233280;
+    const pseudoRandom2 = ((seed * 73) % 233280) / 233280;
     
-    // Spread items horizontally within the layer
-    // Use modulo and sine to scatter them naturally
-    const scatterX = Math.sin(index * 132.4) * (layerWidth / 2);
+    // Y position: 20% to 85% of tree height (avoiding top and bottom edges)
+    const yPos = 20 + (pseudoRandom1 * 65);
     
+    // X position constrained by cone shape (wider at bottom, narrower at top)
+    // Progress down the tree
+    const progressY = (yPos - 20) / 65; // 0 to 1
+    // Maximum width at each level (cone shape)
+    const maxWidth = 10 + (progressY * 70); // 10% at top, 80% at bottom
+    
+    // Spread within the available width, centered at 50%
+    const xOffset = (pseudoRandom2 - 0.5) * maxWidth;
+    const xPos = 50 + xOffset;
+
     // Colors for ornaments
     const colors = [
-      "bg-red-500", "bg-yellow-400", "bg-blue-400", "bg-purple-400", 
-      "bg-pink-400", "bg-orange-400", "bg-teal-400"
+      "bg-red-600", "bg-yellow-400", "bg-blue-400", "bg-purple-400", 
+      "bg-pink-400", "bg-orange-400", "bg-teal-400", "bg-emerald-400",
+      "bg-rose-500", "bg-amber-400"
     ];
     const color = colors[index % colors.length];
 
-    return { x: scatterX, y, color };
+    return { x: xPos, y: yPos, color };
   };
 
+  // Find the "I love you" message
+  const loveMessage = messages.find(m => m.content.toLowerCase().includes("i love you"));
+  const ornamentMessages = messages.filter(m => !m.content.toLowerCase().includes("i love you"));
+
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[600px] w-full max-w-2xl mx-auto py-12">
+    <div className="relative flex flex-col items-center justify-center min-h-[700px] w-full max-w-2xl mx-auto py-12">
       
-      {/* The Star Topper */}
-      <motion.div
+      {/* The Star Topper - Shows "I love you" message */}
+      <motion.button
+        onClick={(e) => loveMessage && handleOrnamentClick(loveMessage, e as any)}
         animate={{ 
-          scale: [1, 1.1, 1],
+          scale: [1, 1.15, 1],
           rotate: [0, 5, -5, 0],
-          filter: ["brightness(1)", "brightness(1.3)", "brightness(1)"]
+          filter: ["brightness(1)", "brightness(1.4)", "brightness(1)"]
         }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="relative z-20 mb-[-20px] text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]"
+        className="relative z-20 mb-[-40px] text-yellow-300 drop-shadow-[0_0_20px_rgba(250,204,21,0.8)] hover:scale-110 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-200"
       >
-        <Star size={64} fill="currentColor" className="stroke-yellow-600" />
-      </motion.div>
-
-      {/* The Tree */}
-      <div className="relative w-full max-w-md aspect-[3/4] flex justify-center">
-        
-        {/* Tree Body - SVG for nice organic shape */}
-        <svg viewBox="0 0 200 300" className="w-full h-full drop-shadow-2xl filter">
-          <defs>
-            <linearGradient id="treeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#1a472a" />
-              <stop offset="50%" stopColor="#2d6a4f" />
-              <stop offset="100%" stopColor="#1a472a" />
-            </linearGradient>
-            <filter id="fuzzy">
-              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
-            </filter>
-          </defs>
-          
-          {/* Tree Layers */}
-          <motion.path 
-            d="M100,20 L130,80 H70 Z" 
-            fill="url(#treeGradient)" 
-            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: "spring" }}
-          />
-          <motion.path 
-            d="M100,50 L150,140 H50 Z" 
-            fill="url(#treeGradient)" 
-            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }}
-          />
-          <motion.path 
-            d="M100,100 L170,220 H30 Z" 
-            fill="url(#treeGradient)" 
-            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: "spring" }}
-          />
-          <motion.path 
-            d="M100,160 L190,300 H10 Z" 
-            fill="url(#treeGradient)" 
-            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4, type: "spring" }}
-          />
-          
-          {/* Trunk */}
-          <path d="M90,300 L90,320 L110,320 L110,300 Z" fill="#5D4037" />
+        <svg className="w-20 h-20" viewBox="0 0 100 100" fill="currentColor">
+          <polygon points="50,10 61,40 93,40 67,60 78,90 50,70 22,90 33,60 7,40 39,40" />
         </svg>
+      </motion.button>
 
-        {/* Ornaments Layer */}
+      {/* The Tree Image */}
+      <div className="relative w-full max-w-md aspect-[3/4] flex justify-center drop-shadow-2xl overflow-hidden rounded-lg">
+        <img 
+          src={treeImage} 
+          alt="Christmas Tree" 
+          className="w-full h-full object-cover"
+        />
+
+        {/* Ornaments Layer - Positioned over the tree image */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* We use an overlay div to position absolute elements relative to the SVG container */}
-          <div className="relative w-full h-full">
-            <AnimatePresence>
-              {messages.map((msg, idx) => {
-                const pos = getOrnamentPosition(idx, messages.length);
-                // Adjust position to center (100 is roughly SVG center x)
-                // We use percentages for responsiveness
-                
-                // Manual overrides for better distribution if needed, but algorithmic is fine for now
-                // Mapping the SVG coords roughly to %: 
-                // Top: ~10%, Bottom: ~85%
-                
-                // Let's create a simpler mapped position based on index to ensure coverage
-                // Zig-zag pattern down the tree
-                const row = Math.floor(idx / 3);
-                const col = idx % 3;
-                const totalRows = Math.ceil(messages.length / 3);
-                
-                // Cone shape math: Width available at height h
-                const progressY = (idx + 1) / (messages.length + 2);
-                const yPos = 15 + (progressY * 70); // 15% to 85%
-                
-                // Spread increases with Y (cone)
-                const spread = 10 + (progressY * 60); 
-                
-                // Randomish x-offset within the spread
-                // Use a pseudo-random based on index to be stable
-                const pseudoRandom = ((idx * 9301 + 49297) % 233280) / 233280;
-                const xOffset = (pseudoRandom - 0.5) * spread; 
-                
-                const xPos = 50 + xOffset;
+          <AnimatePresence>
+            {ornamentMessages.map((msg, idx) => {
+              const pos = getOrnamentPosition(idx, ornamentMessages.length);
 
-                return (
-                  <motion.button
-                    key={msg.id}
-                    onClick={(e) => handleOrnamentClick(msg, e)}
-                    className={`
-                      absolute w-8 h-8 rounded-full pointer-events-auto
-                      ${pos.color} ornament-shadow
-                      hover:scale-125 hover:brightness-125 focus:outline-none focus:ring-2 focus:ring-white
-                      transition-transform duration-300 cursor-pointer
-                      flex items-center justify-center
-                    `}
-                    style={{ 
-                      top: `${yPos}%`, 
-                      left: `${xPos}%`,
-                      transform: 'translate(-50%, -50%)' 
-                    }}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ 
-                      scale: 1, 
-                      opacity: 1,
-                      y: [0, 2, 0] // Gentle bobbing
-                    }}
-                    transition={{ 
-                      delay: 0.5 + (idx * 0.1),
-                      y: {
-                        duration: 2 + Math.random(),
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: Math.random() * 2
-                      }
-                    }}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    {/* Glossy reflection dot */}
-                    <div className="absolute top-1 left-2 w-2 h-2 bg-white/40 rounded-full blur-[1px]" />
-                  </motion.button>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+              return (
+                <motion.button
+                  key={msg.id}
+                  onClick={(e) => handleOrnamentClick(msg, e)}
+                  className={`
+                    absolute w-7 h-7 rounded-full pointer-events-auto
+                    ${pos.color} ornament-shadow
+                    hover:scale-125 hover:brightness-125 focus:outline-none focus:ring-2 focus:ring-white
+                    transition-transform duration-300 cursor-pointer
+                    flex items-center justify-center shadow-lg
+                  `}
+                  style={{ 
+                    top: `${pos.y}%`, 
+                    left: `${pos.x}%`,
+                    transform: 'translate(-50%, -50%)' 
+                  }}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ 
+                    scale: 1, 
+                    opacity: 1,
+                    y: [0, 2, 0] // Gentle bobbing
+                  }}
+                  transition={{ 
+                    delay: 0.3 + (idx * 0.08),
+                    y: {
+                      duration: 2.5 + Math.random(),
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: Math.random() * 2
+                    }
+                  }}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  {/* Glossy reflection dot */}
+                  <div className="absolute top-1 left-1.5 w-1.5 h-1.5 bg-white/50 rounded-full blur-sm" />
+                </motion.button>
+              );
+            })}
+          </AnimatePresence>
         </div>
       </div>
-
-      {/* Trunk Base / Pot */}
-      <div className="relative mt-[-20px] z-10">
-        <div className="w-24 h-20 bg-amber-900 rounded-b-lg shadow-inner border-t-4 border-amber-950/30 flex items-center justify-center">
-          <span className="text-amber-950/40 text-xs font-bold font-display tracking-widest uppercase">North Pole</span>
-        </div>
-      </div>
-
-      {/* Decorative Floor/Rug */}
-      <div className="w-64 h-12 bg-red-700/20 rounded-[100%] blur-xl mt-[-10px] z-0" />
 
       {/* Message Dialog */}
       <Dialog open={!!selectedMessage} onOpenChange={(open) => !open && setSelectedMessage(null)}>
-        <DialogContent className="sm:max-w-md border-4 border-double border-yellow-500/50 bg-[#fffcf0] dark:bg-slate-900 shadow-xl">
+        <DialogContent className="sm:max-w-md border-4 border-double border-yellow-400 bg-white dark:bg-slate-900 shadow-xl">
           <DialogHeader>
             <DialogTitle className="text-center font-display text-3xl text-red-600 dark:text-red-400">
-              Um Desejo de Natal
+              {selectedMessage?.content.toLowerCase().includes("love") ? "My Special Message" : "A Christmas Wish"}
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-6">
-             <div className="text-4xl mb-4 animate-bounce">🎁</div>
-             <DialogDescription className="text-center text-xl font-handwriting leading-loose text-slate-800 dark:text-slate-100 px-4">
+             <div className="text-5xl mb-4">
+               {selectedMessage?.content.toLowerCase().includes("love") ? "💝" : "🎄"}
+             </div>
+             <DialogDescription className="text-center text-2xl font-handwriting leading-loose text-slate-800 dark:text-slate-100 px-4">
                "{selectedMessage?.content}"
              </DialogDescription>
           </div>
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-green-500 to-red-500" />
-          <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 via-red-500 to-green-500" />
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-600 via-yellow-400 to-red-600" />
+          <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-green-600 via-red-600 to-green-600" />
         </DialogContent>
       </Dialog>
     </div>
