@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Message } from "@shared/schema";
 import confetti from "canvas-confetti";
-import treeImage from "@assets/stock_images/realistic_christmas__1ecb285c.jpg";
+import treeImage from "@assets/stock_images/full_decorated_chris_02af7c83.jpg";
 
 interface ChristmasTreeProps {
   messages: Message[];
