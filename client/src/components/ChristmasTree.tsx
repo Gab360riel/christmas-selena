@@ -70,37 +70,56 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
         </svg>
       </motion.button>
 
-      {/* Realistic Fluffy Pine Tree */}
+      {/* Realistic Pine Tree */}
       <div className="relative w-full max-w-sm flex justify-center perspective flex-1">
-        <svg viewBox="0 0 400 550" className="w-full h-full drop-shadow-2xl" style={{ filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3))' }}>
+        <svg viewBox="0 0 420 580" className="w-full h-full drop-shadow-2xl" style={{ filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.35))' }}>
           <defs>
-            {/* Fluffy texture filters */}
-            <filter id="fluffyTexture">
-              <feTurbulence type="fractalNoise" baseFrequency="2.2" numOctaves="6" seed="2" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.8" xChannelSelector="R" yChannelSelector="G" />
+            {/* Advanced texture */}
+            <filter id="pineTexture">
+              <feTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="7" seed="5" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
             </filter>
 
-            {/* Color gradients for pine effect */}
-            <linearGradient id="pineGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0d3b0d" />
-              <stop offset="50%" stopColor="#1f6331" />
-              <stop offset="100%" stopColor="#0d3b0d" />
+            {/* Shadow for depth */}
+            <filter id="shadowEffect">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+              <feOffset dx="1" dy="2" result="offsetblur" />
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3" />
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode in="offsetblur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            {/* Gradients */}
+            <linearGradient id="g1" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#0a2a0a" />
+              <stop offset="50%" stopColor="#1d5a1d" />
+              <stop offset="100%" stopColor="#0a2a0a" />
             </linearGradient>
 
-            <linearGradient id="pineGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0a2d0a" />
-              <stop offset="50%" stopColor="#1a5321" />
-              <stop offset="100%" stopColor="#0a2d0a" />
+            <linearGradient id="g2" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#0d3a0d" />
+              <stop offset="50%" stopColor="#2a6f2a" />
+              <stop offset="100%" stopColor="#0d3a0d" />
             </linearGradient>
 
-            <linearGradient id="pineGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0f3d0f" />
-              <stop offset="50%" stopColor="#226d2a" />
-              <stop offset="100%" stopColor="#0f3d0f" />
+            <linearGradient id="g3" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#082f08" />
+              <stop offset="50%" stopColor="#1f5b1f" />
+              <stop offset="100%" stopColor="#082f08" />
+            </linearGradient>
+
+            <linearGradient id="g4" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#0c3c0c" />
+              <stop offset="50%" stopColor="#307030" />
+              <stop offset="100%" stopColor="#0c3c0c" />
             </linearGradient>
 
             <filter id="lightGlow">
-              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
@@ -108,76 +127,112 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
             </filter>
           </defs>
 
-          {/* PINE TREE - Triangle sections stacked */}
+          {/* MAIN TREE SECTIONS - Overlapping triangles */}
           
-          {/* Top tier - tiny point */}
+          {/* Tier 1 - Top point */}
           <motion.path 
-            d="M 200,40 L 240,110 L 160,110 Z" 
-            fill="url(#pineGradient1)"
+            d="M 210,35 L 250,95 L 170,95 Z" 
+            fill="url(#g1)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.05, type: "spring" }}
-            filter="url(#fluffyTexture)"
+            filter="url(#pineTexture)"
           />
 
-          {/* Second tier */}
+          {/* Tier 2 - overlapping */}
           <motion.path 
-            d="M 200,95 L 280,190 L 120,190 Z" 
-            fill="url(#pineGradient2)"
+            d="M 210,75 L 290,150 L 130,150 Z" 
+            fill="url(#g2)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1, type: "spring" }}
-            filter="url(#fluffyTexture)"
+            transition={{ delay: 0.08, type: "spring" }}
+            filter="url(#pineTexture)"
           />
 
-          {/* Third tier */}
+          {/* Tier 3 */}
           <motion.path 
-            d="M 200,165 L 320,280 L 80,280 Z" 
-            fill="url(#pineGradient1)"
+            d="M 210,130 L 330,220 L 90,220 Z" 
+            fill="url(#g1)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.15, type: "spring" }}
-            filter="url(#fluffyTexture)"
+            transition={{ delay: 0.11, type: "spring" }}
+            filter="url(#pineTexture)"
           />
 
-          {/* Fourth tier */}
+          {/* Tier 4 */}
           <motion.path 
-            d="M 200,260 L 360,390 L 40,390 Z" 
-            fill="url(#pineGradient3)"
+            d="M 210,190 L 360,295 L 60,295 Z" 
+            fill="url(#g3)"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.14, type: "spring" }}
+            filter="url(#pineTexture)"
+          />
+
+          {/* Tier 5 */}
+          <motion.path 
+            d="M 210,260 L 390,380 L 30,380 Z" 
+            fill="url(#g2)"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.17, type: "spring" }}
+            filter="url(#pineTexture)"
+          />
+
+          {/* Tier 6 - Bottom widest */}
+          <motion.path 
+            d="M 210,340 L 410,470 L 10,470 Z" 
+            fill="url(#g4)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: "spring" }}
-            filter="url(#fluffyTexture)"
+            filter="url(#pineTexture)"
           />
 
-          {/* Bottom tier - widest */}
+          {/* Shadow layers for depth and realism */}
           <motion.path 
-            d="M 200,360 L 390,480 L 10,480 Z" 
-            fill="url(#pineGradient2)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.25, type: "spring" }}
-            filter="url(#fluffyTexture)"
+            d="M 210,75 L 290,150 L 130,150 Z" 
+            fill="rgba(0, 0, 0, 0.08)"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25 }}
+          />
+
+          <motion.path 
+            d="M 210,190 L 360,295 L 60,295 Z" 
+            fill="rgba(0, 0, 0, 0.06)"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.27 }}
+          />
+
+          <motion.path 
+            d="M 210,340 L 410,470 L 10,470 Z" 
+            fill="rgba(0, 0, 0, 0.05)"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.29 }}
           />
 
           {/* Trunk */}
           <motion.g
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.32 }}
           >
-            <rect x="180" y="480" width="40" height="60" fill="#6d4c41" />
-            <rect x="180" y="480" width="40" height="60" fill="rgba(0, 0, 0, 0.1)" />
-            <ellipse cx="200" cy="540" rx="25" ry="8" fill="#5d3c31" />
+            <rect x="185" y="470" width="50" height="70" fill="#7d5c4a" />
+            <rect x="185" y="470" width="50" height="70" fill="rgba(0, 0, 0, 0.15)" />
+            <rect x="190" y="470" width="20" height="70" fill="#8d6c5a" opacity="0.6" />
+            <ellipse cx="210" cy="540" rx="28" ry="10" fill="#6d4c3a" />
           </motion.g>
 
-          {/* Decorative lights */}
-          {[...Array(20)].map((_, i) => {
-            const angle = (i / 20) * Math.PI * 2;
-            const radius = 110 + Math.sin(i * 0.6) * 60;
-            const x = 200 + Math.cos(angle) * radius;
-            const y = 260 + Math.sin(angle) * radius;
-            const lightColors = ['#FFD700', '#FF69B4', '#00BFFF', '#FFB6C1', '#7FFF00'];
+          {/* Decorative lights - scattered throughout */}
+          {[...Array(24)].map((_, i) => {
+            const angle = (i / 24) * Math.PI * 2;
+            const radius = 100 + Math.sin(i * 0.5) * 70;
+            const x = 210 + Math.cos(angle) * radius;
+            const y = 280 + Math.sin(angle) * radius;
+            const lightColors = ['#FFD700', '#FF69B4', '#00BFFF', '#00FF00', '#FFB6C1', '#FF6347'];
             const color = lightColors[i % lightColors.length];
             
             return (
@@ -185,14 +240,14 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                 key={`light-${i}`}
                 cx={x}
                 cy={y}
-                r="3"
+                r="2.5"
                 fill={color}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0.2, 0.9, 0.2] }}
+                animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{ 
-                  duration: 2 + Math.random(), 
+                  duration: 2.5 + Math.random() * 1.5, 
                   repeat: Infinity, 
-                  delay: Math.random() * 2 
+                  delay: Math.random() * 2.5 
                 }}
                 filter="url(#lightGlow)"
                 style={{ mixBlendMode: 'screen' }}
@@ -230,7 +285,7 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                     y: [0, 2, 0]
                   }}
                   transition={{ 
-                    delay: 0.35 + (idx * 0.05),
+                    delay: 0.4 + (idx * 0.04),
                     y: {
                       duration: 2.5 + Math.random(),
                       repeat: Infinity,
