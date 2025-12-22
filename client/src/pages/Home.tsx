@@ -14,7 +14,15 @@ const STATIC_MESSAGES: Message[] = [
   { id: 9, content: "The best gift is love." },
   { id: 10, content: "Smile, it's Christmas!" },
   { id: 11, content: "Spread light wherever you go." },
-  { id: 12, content: "Live each moment with joy and passion." }
+  { id: 12, content: "Live each moment with joy and passion." },
+  { id: 13, content: "You make my heart shine brighter." },
+  { id: 14, content: "Every moment with you is a gift." },
+  { id: 15, content: "Wishing you warmth and joy." },
+  { id: 16, content: "You are my greatest blessing." },
+  { id: 17, content: "Together we create magic." },
+  { id: 18, content: "May your wishes come true." },
+  { id: 19, content: "Thank you for being you." },
+  { id: 20, content: "Life is better with you." }
 ];
 
 export default function Home() {

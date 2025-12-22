@@ -36,15 +36,15 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
     const rand1 = Math.abs(Math.sin(seed1) * 10000) % 1;
     const rand2 = Math.abs(Math.sin(seed2) * 10000) % 1;
     
-    // Y position: spread evenly from top to bottom (15% to 80%)
-    const yPos = 15 + (rand1 * 65);
+    // Y position: spread evenly from 20% to 82% (stays within tree)
+    const yPercent = 20 + (rand1 * 62);
     
-    // X position: use cone shape but with better distribution
-    const progressY = (yPos - 15) / 65;
-    // Width increases with height for pine shape
-    const maxWidth = 8 + (progressY * 68);
-    // Use second random value for x positioning
-    const xOffset = (rand2 - 0.5) * maxWidth;
+    // X position: constrained within triangular pine shape
+    // The tree is narrowest at top (20%) and widest at bottom (82%)
+    const progressY = (yPercent - 20) / 62; // 0 to 1
+    // At top: width is ~8% each side of center, at bottom: ~35% each side
+    const maxOffset = 8 + (progressY * 27);
+    const xOffset = (rand2 - 0.5) * maxOffset;
     const xPos = 50 + xOffset;
 
     const colors = [
@@ -54,7 +54,7 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
     ];
     const color = colors[index % colors.length];
 
-    return { x: xPos, y: yPos, color };
+    return { x: xPos, y: yPercent, color };
   };
 
   const loveMessage = messages.find(m => m.content.toLowerCase().includes("i love you"));
