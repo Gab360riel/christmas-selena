@@ -21,128 +21,28 @@ export default function Home() {
   const messages = STATIC_MESSAGES;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-gradient-to-b from-red-700 via-red-600 to-red-800 transition-colors duration-1000">
+    <div className="fixed inset-0 w-screen h-screen relative overflow-hidden bg-gradient-to-b from-red-700 via-red-600 to-red-800 transition-colors duration-1000 flex flex-col">
       <Snowfall />
-      
-      {/* Top Snow Arc Decoration */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-40 pointer-events-none">
-        <svg className="w-full h-full" viewBox="0 0 1200 300" preserveAspectRatio="none">
-          <defs>
-            <filter id="snowGlow">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-            </filter>
-          </defs>
-          {/* Main arc curve */}
-          <path
-            d="M 0,150 Q 300,20 600,0 T 1200,150"
-            fill="none"
-            stroke="white"
-            strokeWidth="80"
-            opacity="0.4"
-            filter="url(#snowGlow)"
-          />
-          {/* Additional curves for depth */}
-          <path
-            d="M 100,180 Q 400,80 600,60 T 1100,180"
-            fill="none"
-            stroke="white"
-            strokeWidth="40"
-            opacity="0.25"
-            filter="url(#snowGlow)"
-          />
-        </svg>
-      </div>
 
-      {/* Left Garland */}
-      <div className="absolute top-16 left-0 w-48 h-48 pointer-events-none">
-        <svg className="w-full h-full" viewBox="0 0 200 200">
-          <path
-            d="M 0,50 Q 50,20 100,30 T 200,50"
-            fill="none"
-            stroke="white"
-            strokeWidth="12"
-            opacity="0.5"
-            strokeLinecap="round"
-          />
-          <circle cx="50" cy="50" r="8" fill="white" opacity="0.6" />
-          <circle cx="100" cy="30" r="8" fill="white" opacity="0.6" />
-          <circle cx="150" cy="50" r="8" fill="white" opacity="0.6" />
-        </svg>
-      </div>
-
-      {/* Right Garland */}
-      <div className="absolute top-16 right-0 w-48 h-48 pointer-events-none">
-        <svg className="w-full h-full" viewBox="0 0 200 200">
-          <path
-            d="M 0,50 Q 50,20 100,30 T 200,50"
-            fill="none"
-            stroke="white"
-            strokeWidth="12"
-            opacity="0.5"
-            strokeLinecap="round"
-          />
-          <circle cx="50" cy="50" r="8" fill="white" opacity="0.6" />
-          <circle cx="100" cy="30" r="8" fill="white" opacity="0.6" />
-          <circle cx="150" cy="50" r="8" fill="white" opacity="0.6" />
-        </svg>
-      </div>
-
-      {/* Floating Snow Specs Animation */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(60)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute bg-white rounded-full opacity-40 animate-pulse"
-            style={{
-              width: Math.random() * 3 + 2 + 'px',
-              height: Math.random() * 3 + 2 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animation: `drift ${6 + Math.random() * 10}s linear infinite`,
-              animationDelay: Math.random() * 5 + 's',
-            }}
-          />
-        ))}
-      </div>
-
-      <style>{`
-        @keyframes drift {
-          0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.4;
-          }
-          90% {
-            opacity: 0.4;
-          }
-          100% {
-            transform: translateY(100vh) translateX(50px);
-            opacity: 0;
-          }
-        }
-      `}</style>
-
-      <main className="container mx-auto px-4 py-8 relative z-10 flex flex-col items-center min-h-screen">
+      <main className="flex-1 flex flex-col items-center justify-between px-4 relative z-10">
         
         {/* Header Section */}
-        <header className="text-center mt-8 mb-4 space-y-2">
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-white drop-shadow-lg tracking-wide">
+        <header className="text-center py-4 space-y-1">
+          <h1 className="text-2xl sm:text-4xl font-display font-bold text-white drop-shadow-lg">
             My Christmas gift to you my Selsell
           </h1>
-          <p className="text-lg md:text-xl text-white/90 font-body max-w-lg mx-auto drop-shadow">
+          <p className="text-sm sm:text-base text-white/90 font-body drop-shadow">
             Click on an ornament to reveal a special Christmas message.
           </p>
         </header>
 
         {/* Main Content Area */}
-        <div className="flex-1 w-full flex items-center justify-center">
+        <div className="flex-1 w-full flex items-center justify-center max-w-2xl mx-auto">
           <ChristmasTree messages={messages} />
         </div>
 
         {/* Footer */}
-        <footer className="w-full text-center py-6 text-sm text-white/80 font-body drop-shadow">
+        <footer className="text-center text-xs text-white/80 font-body drop-shadow pb-2">
           <p>© {new Date().getFullYear()} Made with ❤️ and Christmas spirit</p>
         </footer>
       </main>

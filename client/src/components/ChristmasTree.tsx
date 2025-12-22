@@ -52,7 +52,7 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
   const ornamentMessages = messages.filter(m => !m.content.toLowerCase().includes("i love you"));
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[750px] w-full max-w-3xl mx-auto py-12">
+    <div className="relative flex flex-col items-center justify-center w-full h-screen max-w-4xl mx-auto overflow-hidden">
       
       {/* Star Topper */}
       <motion.button
@@ -63,52 +63,46 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
           filter: ["brightness(1)", "brightness(1.5)", "brightness(1)"]
         }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="relative z-20 mb-[-50px] text-yellow-300 drop-shadow-[0_0_30px_rgba(250,204,21,1)] hover:scale-120 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-200"
+        className="relative z-20 mb-[-35px] text-yellow-300 drop-shadow-[0_0_30px_rgba(250,204,21,1)] hover:scale-120 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-200"
       >
-        <svg className="w-28 h-28" viewBox="0 0 100 100" fill="currentColor">
-          <polygon points="50,8 61,38 93,38 67,58 78,88 50,68 22,88 33,58 7,38 39,38" />
-          <polygon points="50,8 61,38 93,38 67,58 78,88 50,68 22,88 33,58 7,38 39,38" fill="rgba(255,255,255,0.3)" />
+        <svg className="w-20 h-20" viewBox="0 0 100 100" fill="currentColor">
+          <polygon points="50,10 61,40 93,40 67,60 78,90 50,70 22,90 33,60 7,40 39,40" />
         </svg>
       </motion.button>
 
-      {/* CSS-Based Realistic Tree */}
-      <div className="relative w-full max-w-xl aspect-[3/4] flex justify-center perspective">
-        <svg viewBox="0 0 500 750" className="w-full h-full drop-shadow-2xl" style={{ filter: 'drop-shadow(0 30px 40px rgba(0, 0, 0, 0.4))' }}>
+      {/* Realistic Fluffy Tree with Texture */}
+      <div className="relative flex-1 max-w-lg w-full flex justify-center perspective">
+        <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-2xl" style={{ filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3))' }}>
           <defs>
-            {/* Multiple gradients for realistic depth */}
-            <linearGradient id="treeTopLight" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0d3b0d" />
-              <stop offset="50%" stopColor="#1a5f1a" />
-              <stop offset="100%" stopColor="#0d3b0d" />
-            </linearGradient>
-            
-            <linearGradient id="treeTopDark" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#062b06" />
-              <stop offset="50%" stopColor="#0f4d0f" />
-              <stop offset="100%" stopColor="#062b06" />
-            </linearGradient>
-
-            <linearGradient id="treeBottomLight" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#1a4d1a" />
-              <stop offset="50%" stopColor="#2d7a2d" />
-              <stop offset="100%" stopColor="#1a4d1a" />
-            </linearGradient>
-
-            <linearGradient id="treeBottomDark" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0d3b0d" />
-              <stop offset="50%" stopColor="#1a5f1a" />
-              <stop offset="100%" stopColor="#0d3b0d" />
-            </linearGradient>
-
-            {/* Noise filter for organic texture */}
-            <filter id="treeNoise">
-              <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="5" seed="3" />
-              <feDisplacementMap in="SourceGraphic" in2="treeNoise" scale="4" />
+            {/* Fluffy texture filters */}
+            <filter id="fluffyTexture">
+              <feTurbulence type="fractalNoise" baseFrequency="2" numOctaves="6" seed="2" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G" />
             </filter>
 
-            {/* Light glow */}
-            <filter id="glowLight">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            {/* Soft edge filter */}
+            <filter id="softEdge">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+            </filter>
+
+            {/* Color gradients */}
+            <radialGradient id="treeGradient1" cx="40%" cy="40%">
+              <stop offset="0%" stopColor="#2d7a3d" />
+              <stop offset="100%" stopColor="#0f4620" />
+            </radialGradient>
+
+            <radialGradient id="treeGradient2" cx="40%" cy="40%">
+              <stop offset="0%" stopColor="#1f6331" />
+              <stop offset="100%" stopColor="#0a3620" />
+            </radialGradient>
+
+            <radialGradient id="treeGradient3" cx="40%" cy="40%">
+              <stop offset="0%" stopColor="#2d8a3d" />
+              <stop offset="100%" stopColor="#0f5020" />
+            </radialGradient>
+
+            <filter id="lightGlow">
+              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
@@ -116,127 +110,96 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
             </filter>
           </defs>
 
-          {/* Animated background shadow */}
-          <ellipse cx="250" cy="700" rx="180" ry="30" fill="rgba(0, 0, 0, 0.15)" />
-
-          {/* TOP SECTION - Smallest tier */}
-          <motion.path 
-            d="M 250,50 L 320,160 L 180,160 Z" 
-            fill="url(#treeTopLight)"
-            stroke="#0a2d0a"
-            strokeWidth="1"
+          {/* Tree Layer 1 - Top (smallest) */}
+          <motion.circle
+            cx="200" cy="80" r="65"
+            fill="url(#treeGradient1)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.05, type: "spring", stiffness: 100 }}
-            filter="url(#treeNoise)"
-          />
-          <motion.path 
-            d="M 250,50 L 320,160 L 180,160 Z" 
-            fill="rgba(0, 50, 0, 0.3)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.08 }}
+            transition={{ delay: 0.05, type: "spring" }}
+            filter="url(#fluffyTexture)"
             style={{ mixBlendMode: 'multiply' }}
           />
 
-          {/* SECOND SECTION */}
-          <motion.path 
-            d="M 250,130 L 350,280 L 150,280 Z" 
-            fill="url(#treeTopDark)"
-            stroke="#062b06"
-            strokeWidth="1"
+          {/* Tree Layer 2 */}
+          <motion.circle
+            cx="200" cy="150" r="95"
+            fill="url(#treeGradient2)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.12, type: "spring" }}
-            filter="url(#treeNoise)"
-          />
-          <motion.path 
-            d="M 250,130 L 350,280 L 150,280 Z" 
-            fill="rgba(0, 40, 0, 0.4)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.15 }}
+            transition={{ delay: 0.1, type: "spring" }}
+            filter="url(#fluffyTexture)"
             style={{ mixBlendMode: 'multiply' }}
           />
 
-          {/* THIRD SECTION */}
-          <motion.path 
-            d="M 250,240 L 400,420 L 100,420 Z" 
-            fill="url(#treeBottomLight)"
-            stroke="#0f4d0f"
-            strokeWidth="1"
+          {/* Tree Layer 3 - Middle */}
+          <motion.circle
+            cx="200" cy="230" r="130"
+            fill="url(#treeGradient1)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.18, type: "spring" }}
-            filter="url(#treeNoise)"
-          />
-          <motion.path 
-            d="M 250,240 L 400,420 L 100,420 Z" 
-            fill="rgba(0, 35, 0, 0.35)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.21 }}
+            transition={{ delay: 0.15, type: "spring" }}
+            filter="url(#fluffyTexture)"
             style={{ mixBlendMode: 'multiply' }}
           />
 
-          {/* BOTTOM SECTION - Largest */}
-          <motion.path 
-            d="M 250,380 L 450,620 L 50,620 Z" 
-            fill="url(#treeBottomDark)"
-            stroke="#0d3b0d"
-            strokeWidth="1"
+          {/* Tree Layer 4 */}
+          <motion.circle
+            cx="200" cy="320" r="155"
+            fill="url(#treeGradient3)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.24, type: "spring" }}
-            filter="url(#treeNoise)"
-          />
-          <motion.path 
-            d="M 250,380 L 450,620 L 50,620 Z" 
-            fill="rgba(0, 30, 0, 0.4)"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.27 }}
+            transition={{ delay: 0.2, type: "spring" }}
+            filter="url(#fluffyTexture)"
             style={{ mixBlendMode: 'multiply' }}
           />
 
-          {/* TRUNK */}
+          {/* Tree Layer 5 - Bottom (largest) */}
+          <motion.circle
+            cx="200" cy="400" r="170"
+            fill="url(#treeGradient2)"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.25, type: "spring" }}
+            filter="url(#fluffyTexture)"
+            style={{ mixBlendMode: 'multiply' }}
+          />
+
+          {/* Trunk */}
           <motion.g
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <rect x="220" y="620" width="60" height="100" fill="#6d4c41" />
-            <rect x="220" y="620" width="60" height="100" fill="rgba(0, 0, 0, 0.2)" opacity="0.5" />
-            <rect x="225" y="620" width="25" height="100" fill="#7d5c51" />
-            <ellipse cx="250" cy="720" rx="40" ry="12" fill="#5d3c31" />
+            <rect x="180" y="420" width="40" height="60" fill="#6d4c41" />
+            <rect x="180" y="420" width="40" height="60" fill="rgba(0, 0, 0, 0.1)" />
+            <ellipse cx="200" cy="480" rx="25" ry="10" fill="#5d3c31" />
           </motion.g>
 
-          {/* DECORATIVE LIGHTS - Animated */}
-          {[...Array(20)].map((_, i) => {
-            const angle = (i / 20) * Math.PI * 2;
-            const radius = 100 + Math.sin(i * 0.5) * 50;
-            const x = 250 + Math.cos(angle) * radius;
-            const y = 300 + Math.sin(angle) * radius + 50;
-            const lightColor = ['#FFD700', '#FF69B4', '#00BFFF', '#FF4500'][i % 4];
+          {/* Decorative lights scattered around */}
+          {[...Array(18)].map((_, i) => {
+            const angle = (i / 18) * Math.PI * 2;
+            const radius = 120 + Math.sin(i * 0.7) * 40;
+            const x = 200 + Math.cos(angle) * radius;
+            const y = 240 + Math.sin(angle) * radius;
+            const lightColors = ['#FFD700', '#FF69B4', '#00BFFF', '#FFB6C1'];
+            const color = lightColors[i % lightColors.length];
             
             return (
               <motion.circle
                 key={`light-${i}`}
                 cx={x}
                 cy={y}
-                r="5"
-                fill={lightColor}
+                r="3"
+                fill={color}
                 initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: [0.3, 1, 0.3],
-                  r: [4, 6, 4]
-                }}
+                animate={{ opacity: [0.2, 0.9, 0.2] }}
                 transition={{ 
-                  duration: 2.5 + Math.random() * 1.5, 
+                  duration: 2 + Math.random(), 
                   repeat: Infinity, 
-                  delay: Math.random() * 3 
+                  delay: Math.random() * 2 
                 }}
-                filter="url(#glowLight)"
+                filter="url(#lightGlow)"
                 style={{ mixBlendMode: 'screen' }}
               />
             );
@@ -254,37 +217,36 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                   key={msg.id}
                   onClick={(e) => handleOrnamentClick(msg, e)}
                   className={`
-                    absolute w-9 h-9 rounded-full pointer-events-auto
+                    absolute w-8 h-8 rounded-full pointer-events-auto
                     ${pos.color} ornament-shadow
-                    hover:scale-130 hover:brightness-125 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-0
+                    hover:scale-125 hover:brightness-125 focus:outline-none focus:ring-2 focus:ring-white
                     transition-transform duration-300 cursor-pointer
-                    flex items-center justify-center shadow-lg border border-white/20
+                    flex items-center justify-center shadow-lg
                   `}
                   style={{ 
                     top: `${pos.y}%`, 
                     left: `${pos.x}%`,
-                    transform: 'translate(-50%, -50%)',
-                    background: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.4), transparent)`
+                    transform: 'translate(-50%, -50%)'
                   }}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ 
                     scale: 1, 
                     opacity: 1,
-                    y: [0, 3, 0]
+                    y: [0, 2, 0]
                   }}
                   transition={{ 
-                    delay: 0.35 + (idx * 0.08),
+                    delay: 0.35 + (idx * 0.06),
                     y: {
-                      duration: 2.5 + Math.random() * 1.2,
+                      duration: 2.5 + Math.random(),
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay: Math.random() * 2
                     }
                   }}
-                  whileHover={{ scale: 1.3 }}
-                  whileTap={{ scale: 0.85 }}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  <div className="absolute top-2 left-2 w-2.5 h-2.5 bg-white/70 rounded-full blur-sm" />
+                  <div className="absolute top-1 left-2 w-2 h-2 bg-white/50 rounded-full blur-sm" />
                 </motion.button>
               );
             })}
@@ -294,17 +256,17 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
 
       {/* Message Dialog */}
       <Dialog open={!!selectedMessage} onOpenChange={(open) => !open && setSelectedMessage(null)}>
-        <DialogContent className="sm:max-w-md border-4 border-double border-yellow-400 bg-white dark:bg-slate-900 shadow-2xl">
+        <DialogContent className="sm:max-w-md border-4 border-double border-yellow-400 bg-white dark:bg-slate-900 shadow-xl">
           <DialogHeader>
             <DialogTitle className="text-center font-display text-3xl text-red-600 dark:text-red-400">
               {selectedMessage?.content.toLowerCase().includes("love") ? "My Special Message" : "A Christmas Wish"}
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-6">
-             <div className="text-6xl mb-4 animate-bounce">
-               {selectedMessage?.content.toLowerCase().includes("love") ? "💝" : "🎉"}
+             <div className="text-5xl mb-4">
+               {selectedMessage?.content.toLowerCase().includes("love") ? "💝" : "🎄"}
              </div>
-             <DialogDescription className="text-center text-2xl font-handwriting leading-relaxed text-slate-800 dark:text-slate-100 px-4">
+             <DialogDescription className="text-center text-2xl font-handwriting leading-loose text-slate-800 dark:text-slate-100 px-4">
                "{selectedMessage?.content}"
              </DialogDescription>
           </div>
