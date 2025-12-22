@@ -28,14 +28,23 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
   };
 
   const getOrnamentPosition = (index: number) => {
-    const seed = index * 9301 + 49297;
-    const pseudoRandom1 = ((seed) % 233280) / 233280;
-    const pseudoRandom2 = ((seed * 73) % 233280) / 233280;
+    // Better random distribution using multiple seed values
+    const seed1 = (index * 73856093) ^ 19349663;
+    const seed2 = (index * 83492791) ^ 21987123;
     
-    const yPos = 18 + (pseudoRandom1 * 65);
-    const progressY = (yPos - 18) / 65;
-    const maxWidth = 6 + (progressY * 70);
-    const xOffset = (pseudoRandom2 - 0.5) * maxWidth;
+    // Generate two independent random values
+    const rand1 = Math.abs(Math.sin(seed1) * 10000) % 1;
+    const rand2 = Math.abs(Math.sin(seed2) * 10000) % 1;
+    
+    // Y position: spread evenly from top to bottom (15% to 80%)
+    const yPos = 15 + (rand1 * 65);
+    
+    // X position: use cone shape but with better distribution
+    const progressY = (yPos - 15) / 65;
+    // Width increases with height for pine shape
+    const maxWidth = 8 + (progressY * 68);
+    // Use second random value for x positioning
+    const xOffset = (rand2 - 0.5) * maxWidth;
     const xPos = 50 + xOffset;
 
     const colors = [
@@ -226,13 +235,26 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
             <ellipse cx="210" cy="540" rx="28" ry="10" fill="#6d4c3a" />
           </motion.g>
 
-          {/* Decorative lights - scattered throughout */}
-          {[...Array(24)].map((_, i) => {
-            const angle = (i / 24) * Math.PI * 2;
-            const radius = 100 + Math.sin(i * 0.5) * 70;
-            const x = 210 + Math.cos(angle) * radius;
-            const y = 280 + Math.sin(angle) * radius;
-            const lightColors = ['#FFD700', '#FF69B4', '#00BFFF', '#00FF00', '#FFB6C1', '#FF6347'];
+          {/* Decorative lights - scattered throughout tree */}
+          {[...Array(28)].map((_, i) => {
+            // Better random distribution for lights
+            const seed1 = (i * 73856093) ^ 19349663;
+            const seed2 = (i * 83492791) ^ 21987123;
+            const seed3 = (i * 45564233) ^ 12534567;
+            
+            const rand1 = Math.abs(Math.sin(seed1) * 10000) % 1;
+            const rand2 = Math.abs(Math.sin(seed2) * 10000) % 1;
+            const rand3 = Math.abs(Math.sin(seed3) * 10000) % 1;
+            
+            // Spread lights across tree height (20% to 85%)
+            const y = 130 + (rand1 * 320);
+            
+            // Spread lights horizontally with cone shape
+            const progressY = (y - 130) / 320;
+            const maxWidth = 120 + (progressY * 200);
+            const x = 210 + ((rand2 - 0.5) * maxWidth);
+            
+            const lightColors = ['#FFD700', '#FF69B4', '#00BFFF', '#00FF00', '#FFB6C1', '#FF6347', '#FFA500'];
             const color = lightColors[i % lightColors.length];
             
             return (
@@ -243,11 +265,11 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                 r="2.5"
                 fill={color}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0.3, 1, 0.3] }}
+                animate={{ opacity: [0.2, 0.9, 0.2] }}
                 transition={{ 
-                  duration: 2.5 + Math.random() * 1.5, 
+                  duration: 2.2 + (rand3 * 1.8), 
                   repeat: Infinity, 
-                  delay: Math.random() * 2.5 
+                  delay: rand3 * 2.5 
                 }}
                 filter="url(#lightGlow)"
                 style={{ mixBlendMode: 'screen' }}
