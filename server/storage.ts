@@ -1,37 +1,44 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { messages, type Message, type InsertMessage } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getMessages(): Promise<Message[]>;
+  createMessage(message: InsertMessage): Promise<Message>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private messages: Message[] = [];
+  private currentId = 1;
 
   constructor() {
-    this.users = new Map();
+    // Pre-populate with seed data for immediate frontend availability
+    const seedMessages = [
+      "Muita paz e alegria!",
+      "Feliz Natal e próspero Ano Novo!",
+      "Que a magia do Natal ilumine sua vida.",
+      "Saúde, amor e sucesso!",
+      "Boas festas e muitas realizações!",
+      "Um ano novo cheio de esperança!",
+      "Gratidão por tudo que passou.",
+      "Acredite nos seus sonhos!",
+      "O melhor presente é o amor.",
+      "Sorria, é Natal!",
+      "Espalhe luz por onde for.",
+      "Viva cada momento com intensidade."
+    ];
+    
+    seedMessages.forEach(content => {
+      this.messages.push({ id: this.currentId++, content });
+    });
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getMessages(): Promise<Message[]> {
+    return this.messages;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createMessage(insertMessage: InsertMessage): Promise<Message> {
+    const message: Message = { ...insertMessage, id: this.currentId++ };
+    this.messages.push(message);
+    return message;
   }
 }
 
