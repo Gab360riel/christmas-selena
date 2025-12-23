@@ -389,6 +389,13 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+
+            {/* Star glow gradient for pulsing effect */}
+            <radialGradient id="starGlowGradient" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#FFD700" stopOpacity="0.8" />
+              <stop offset="40%" stopColor="#FFA500" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#FFD700" stopOpacity="0" />
+            </radialGradient>
           </defs>
 
           {/* MAIN TREE SECTIONS - Overlapping triangles with realistic details */}
@@ -856,27 +863,75 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
           >
             <motion.g
               animate={{
-                scale: [1, 1.15, 1],
-                rotate: [0, 5, -5, 0],
+                scale: [1, 1.05, 1],
+                rotate: [0, 3, -3, 0],
               }}
               transition={{
-                duration: 3,
+                duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
             >
+              {/* Glow layer 3 - outermost */}
+              <motion.polygon
+                points="210,5 220,30 245,30 228,42 236,65 210,52 184,65 192,42 175,30 200,30"
+                fill="none"
+                stroke="#FFFF80"
+                strokeWidth="12"
+                animate={{
+                  opacity: [0, 0.6, 0],
+                  strokeWidth: [8, 16, 8],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{ filter: "blur(8px)" }}
+              />
+              {/* Glow layer 2 */}
+              <motion.polygon
+                points="210,5 220,30 245,30 228,42 236,65 210,52 184,65 192,42 175,30 200,30"
+                fill="none"
+                stroke="#FFD700"
+                strokeWidth="6"
+                animate={{
+                  opacity: [0.3, 1, 0.3],
+                  strokeWidth: [4, 10, 4],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{ filter: "blur(4px)" }}
+              />
+              {/* Glow layer 1 - closest */}
+              <motion.polygon
+                points="210,5 220,30 245,30 228,42 236,65 210,52 184,65 192,42 175,30 200,30"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="3"
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{ filter: "blur(2px)" }}
+              />
+              {/* Main star body */}
               <polygon
                 points="210,5 220,30 245,30 228,42 236,65 210,52 184,65 192,42 175,30 200,30"
                 fill="#FFD700"
-                filter="url(#starGlow)"
-                style={{
-                  filter: "drop-shadow(0 0 10px rgba(255, 215, 0, 0.9))",
-                }}
               />
+              {/* Inner highlight */}
               <polygon
                 points="210,5 220,30 245,30 228,42 236,65 210,52 184,65 192,42 175,30 200,30"
                 fill="#FFA500"
-                opacity="0.6"
+                opacity="0.5"
               />
             </motion.g>
           </motion.g>
