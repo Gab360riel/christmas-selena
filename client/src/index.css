@@ -60,13 +60,13 @@
 
 @layer base {
   html {
-    background-color: #dc2626;
+    background-color: #b91c1c;
   }
   
   body {
     @apply bg-background text-foreground antialiased selection:bg-secondary/30;
     font-family: var(--font-body);
-    background-color: #dc2626;
+    background-color: #b91c1c;
     background-image: 
       radial-gradient(circle at 15% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 25%),
       radial-gradient(circle at 85% 30%, rgba(220, 20, 60, 0.03) 0%, transparent 25%);
