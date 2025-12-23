@@ -59,12 +59,29 @@
 }
 
 @layer base {
+  html {
+    background-color: #dc2626;
+  }
+  
   body {
     @apply bg-background text-foreground antialiased selection:bg-secondary/30;
     font-family: var(--font-body);
+    background-color: #dc2626;
     background-image: 
       radial-gradient(circle at 15% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 25%),
       radial-gradient(circle at 85% 30%, rgba(220, 20, 60, 0.03) 0%, transparent 25%);
+    /* Safe area for iOS notch */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -7,7 +7,7 @@ const STATIC_MESSAGES: Message[] = [
   { id: 2, content: "You make everything better just by being you" },
   { id: 3, content: "I think about you often" },
   { id: 4, content: "You're really special to me" },
-  { id: 5, content: "Merry Christmas, Selena" },
+  { id: 5, content: "Merry Christmas" },
   { id: 6, content: "Meeting you was wonderful" },
   { id: 7, content: "I'm grateful to have you in my life" },
   { id: 8, content: "I believe in you and your dreams" },
@@ -27,7 +27,7 @@ const STATIC_MESSAGES: Message[] = [
   { id: 22, content: "You mean a lot to me" },
   { id: 23, content: "You deserve all the good things in life" },
   { id: 24, content: "I hope this Christmas brings you joy" },
-  { id: 25, content: "You're wonderful, Selena" }
+  { id: 25, content: "You're wonderful" }
 ];
 
 export default function Home() {
