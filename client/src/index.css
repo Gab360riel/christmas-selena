@@ -59,6 +59,10 @@
 }
 
 @layer base {
+  * {
+    cursor: url("/bengala-doce.png") 16 16, auto !important;
+  }
+  
   html {
     background-color: #b91c1c;
     overflow: hidden;

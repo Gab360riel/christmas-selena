@@ -1015,7 +1015,7 @@ export function ChristmasTree({ messages }: ChristmasTreeProps) {
                 ? "💝"
                 : "🎄"}
             </div>
-            <DialogDescription className="text-center text-2xl font-handwriting leading-loose text-slate-800 dark:text-slate-100 px-4">
+            <DialogDescription className="text-center text-2xl font-handwriting leading-loose text-slate-800 dark:text-slate-100 px-4 whitespace-pre-line">
               {selectedMessage?.content}
             </DialogDescription>
           </div>
